@@ -16,9 +16,10 @@ Route::get('/', function () {
 });
 
 Route::get('/list_customers', function(){ 
-
+    
+    $url = env('SHOPIFY_URL') . '/admin/customers.json';
     $client = new GuzzleHttp\Client();
-    $res = $client->get( env('SHOPIFY_URL'), ['auth' =>  [ env('SHOPIFY_KEY'), env('SHOPIFY_SECRET') ] ]);
+    $res = $client->get( $url, ['auth' =>  [ env('SHOPIFY_KEY'), env('SHOPIFY_SECRET') ] ]);
 
     return $res->getBody();
     
