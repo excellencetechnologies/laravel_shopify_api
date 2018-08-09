@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::get('/list_customers', 'ShopifyController@listCustomers');
+
+Route::get('/search_customers', 'ShopifyController@searchCustomers');
