@@ -16,3 +16,9 @@ Route::get('/', function () {
 });
 
 Route::get('/list_customers', 'ShopifyController@listCustomers');
+
+Route::get('/search_customers', 'ShopifyController@searchCustomers');
+
+Route::get('/get_user_locations', 'ShopifyController@getUserLocation');
+
+Route::post('/add_user_location', 'ShopifyController@addUserLocation');
