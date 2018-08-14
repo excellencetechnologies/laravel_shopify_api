@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use Exception;
 use App\Location;
 use App\Search;
@@ -10,6 +11,13 @@ use Illuminate\Http\Request;
 
 class ShopifyController extends Controller
 {
+    private $admin;
+
+    public function __construct() 
+    {
+        $this->admin = "/admin";
+    }
+
     public function listCustomers()
     {
         try {
@@ -78,3 +86,5 @@ class ShopifyController extends Controller
         return $response;
     }
 }
+
+
