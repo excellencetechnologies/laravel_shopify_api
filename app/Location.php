@@ -17,17 +17,19 @@ class Location extends Model
 
     public function addUserLocation($data)
     {
-        if(empty($data)){
-            throw new Exception('Please add data.');
-        }
+        $validator = Validator::make($data, [
+            'address' => 'required',
+            'location' => 'required'
+        ]);
 
-        for($i = 0; $i < count($data); $i++){
-            $loc = new Location();
-            $loc->address = $data[$i]['address'];
-            $loc->location = $data[$i]['location'];
-            $loc->save();
-            $location[] = $loc;
-        }
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);            
+        }  
+
+        $location = new Location();
+        $location->address = $data['address'];
+        $location->location = $data['location'];
+        $location->save();
 
         return $location;        
     }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Location;
+
 use Exception;
+use App\Location;
+use App\Search;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
@@ -18,27 +20,29 @@ class ShopifyController extends Controller
 
     public function listCustomers()
     {
-        $url = env('SHOPIFY_URL') . $this->admin . '/customers.json';
-        $client = new Client();
-        $res = $client->get( $url, ['auth' =>  [ env('SHOPIFY_KEY'), env('SHOPIFY_SECRET') ] ]);
+        try {
+            $search = new Search();
+            $response = [ 'error' => 0, 'data' => $search->listCustomers() ];
+            
+        } catch (Exception $ex) {
+            $response = [ 'error' => 1, 'message' => $ex->getMessage() ];
+        }
 
-        return $res->getBody();
+        return $response;
     }
 
     public function searchCustomers()
     {
-        $data = request()->only('query');        
-        
-        if($data == null || $data == ""){
-            $url = env('SHOPIFY_URL') . $this->admin . '/customers/search.json';            
-        } else {
-            $url = env('SHOPIFY_URL') . $this->admin . '/customers/search.json?query=' . $data['query'];
+        try {
+            $data = request()->all();
+            $search = new Search();
+            $response = [ 'error' => 0, 'data' => $search->searchCustomers($data) ];
+            
+        } catch (Exception $ex) {
+            $response = [ 'error' => 1, 'message' => $ex->getMessage() ];
         }
-        
-        $client = new Client();
-        $res = $client->get( $url, ['auth' =>  [ env('SHOPIFY_KEY'), env('SHOPIFY_SECRET') ] ]);
 
-        return $res->getBody();
+        return $response;
     }
 
     public function addUserLocation()
@@ -52,7 +56,7 @@ class ShopifyController extends Controller
             $response = [ 'error' => 1, 'message' => $ex->getMessage() ];
         }
 
-        return response()->json($response);
+        return $response;
     }
 
     public function getUserLocation()
@@ -66,6 +70,20 @@ class ShopifyController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function getUserId()
+    {
+        try {
+            $data = request()->all();
+            $search = new Search();
+            $response = [ 'error' => 0, 'data' => $search->getUserId($data) ];
+
+        } catch (Exception $ex) {
+            $response = [ 'error' => 1, 'message' => $ex->getMessage() ];
+        }
+
+        return $response;
     }
 }
 
